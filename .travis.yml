@@ -1,0 +1,8 @@
+language: python
+python: "3.8"
+script:
+  # https://github.com/kibaffo33/aws_transcribe_to_docx
+  - pip install --target ./package tscribe
+  - cd package && zip -r9 ${OLDPWD}/function.zip .
+  # TODO build lambda function
+  # TODO deploy
