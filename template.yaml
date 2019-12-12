@@ -40,5 +40,18 @@ Resources:
 
   SrcBucket:
     Type: AWS::S3::Bucket
+    # NotificationConfiguration must be commented on stack creation,
+    # then uncommented and deployed as an update.
+    # See: https://aws.amazon.com/premiumsupport/knowledge-center/unable-validate-destination-s3/
     Properties:
       BucketName: transcribe-everything-placed-here
+      #NotificationConfiguration:
+      #  LambdaConfigurations:
+      #    - Event: 's3:ObjectCreated:*'
+      #      Filter:
+      #        S3Key:
+      #          Rules:
+      #            -
+      #              Name: suffix
+      #              Value: mp4
+      #      Function: !GetAtt CreateTranscription.Arn
