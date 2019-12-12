@@ -40,3 +40,5 @@ Resources:
 
   SrcBucket:
     Type: AWS::S3::Bucket
+    Properties:
+      BucketName: transcribe-everything-placed-here
