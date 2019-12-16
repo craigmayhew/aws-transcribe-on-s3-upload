@@ -13,8 +13,8 @@ Resources:
         ZipFile: |       
           from __future__ import print_function
 
-          import time
           import boto3
+          import time
 
           def handler(event, context):
             transcribe = boto3.client('transcribe')
