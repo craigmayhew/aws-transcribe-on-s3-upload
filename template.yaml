@@ -1,4 +1,9 @@
 AWSTemplateFormatVersion: '2010-09-09'
+Parameters:
+  S3Bucket: 
+    Type: String
+    Default: transcribe-everything-placed-here
+    Description: S3 Bucket to place mp4 files into, and receive transcribed file into
 Resources:
   CreateTranscription:
     DependsOn: LambdaExecutionRole
@@ -81,7 +86,7 @@ Resources:
       Action: 'lambda:InvokeFunction'
       Principal: s3.amazonaws.com
       SourceAccount: !Ref 'AWS::AccountId'
-      SourceArn: !Sub 'arn:aws:s3:::${SrcBucket}'
+      SourceArn: !Sub 'arn:aws:s3:::${S3Bucket}'
 
   SrcBucket:
     DependsOn: CreateTranscription
