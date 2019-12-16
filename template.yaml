@@ -14,12 +14,15 @@ Resources:
           from __future__ import print_function
 
           import boto3
+          import datetime
           import time
 
           def handler(event, context):
             transcribe = boto3.client('transcribe')
 
-            job_name = "Transcribe Video"
+            x = datetime.datetime.now()
+
+            job_name = "Transcribe-Video-" + x.strftime("%Y-%m-%d-%H-%M-%S")
             job_uri = "s3://transcribe-everything-placed-here/empty.mp4"
 
             transcribe.start_transcription_job(
