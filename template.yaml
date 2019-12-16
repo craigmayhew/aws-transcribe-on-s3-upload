@@ -55,7 +55,7 @@ Resources:
           - sts:AssumeRole
       Path: "/"
       Policies:
-      - PolicyName: root
+      - PolicyName: logs
         PolicyDocument:
           Version: '2012-10-17'
           Statement:
@@ -63,6 +63,15 @@ Resources:
             Action:
             - logs:*
             Resource: arn:aws:logs:*:*:*
+      - PolicyName: transcribe
+        PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+          - Effect: Allow
+            Action:
+              - transcribe:StartTranscriptionJob
+            Resource: 
+              - '*'
 
   LambdaInvokePermission:
     DependsOn: CreateTranscription
