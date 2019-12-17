@@ -41,13 +41,13 @@ Resources:
             print(status)
             return "Complete"
       Handler: index.handler
-      MemorySize: 1536
+      MemorySize: 192
       Role:
         Fn::GetAtt:
         - LambdaExecutionRole
         - Arn
       Runtime: python3.7
-      Timeout: 60
+      Timeout: 1800
 
   LambdaExecutionRole:
     Type: AWS::IAM::Role
