@@ -47,7 +47,7 @@ Resources:
         - LambdaExecutionRole
         - Arn
       Runtime: python3.7
-      Timeout: 1800
+      Timeout: 900
 
   LambdaExecutionRole:
     Type: AWS::IAM::Role
