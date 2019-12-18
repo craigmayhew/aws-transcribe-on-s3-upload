@@ -48,6 +48,9 @@ Resources:
         - Arn
       Runtime: python3.7
       Timeout: 900
+      Environment:
+        Variables: 
+          ENV_S3BUCKET: !Ref S3Bucket
 
   LambdaExecutionRole:
     Type: AWS::IAM::Role
