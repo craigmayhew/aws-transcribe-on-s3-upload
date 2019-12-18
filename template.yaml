@@ -15,7 +15,10 @@ Resources:
 
           import boto3
           import datetime
+          import os
           import time
+          import urllib.request
+          from botocore.exceptions import ClientError
 
           def handler(event, context):
             transcribe = boto3.client('transcribe')
@@ -38,7 +41,20 @@ Resources:
                     break
                 print("Transcribing...")
                 time.sleep(5)
-            print(status)
+
+
+            s3_client = boto3.client('s3')
+            try:
+                file_name = '/tmp/local_saved_file'
+                urllib.request.urlretrieve(status['TranscriptionJob']['Transcript']['TranscriptFileUri'], file_name)
+                bucket = os.getenv('ENV_S3BUCKET')
+                object_name = 'empty.mp4.transcript.json'
+                response = s3_client.upload_file(file_name, bucket, object_name)
+            except ClientError as e:
+                logging.error(e)
+                return False
+            return True
+            
             return "Complete"
       Handler: index.handler
       MemorySize: 192
