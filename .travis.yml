@@ -5,14 +5,7 @@ script:
   # Build lambda function into zip file
   - chmod +x build.sh
   - ./build.sh
-before_deploy:
-  - chmod +x deploy.sh
-deploy:
-  provider: script
-  script: deploy.sh
-  skip_cleanup: true
-  on:
-    branch: master
+  - chmod +x deploy.sh && ./deploy.sh
 
 notifications:
   email: false
