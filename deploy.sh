@@ -1,6 +1,6 @@
 # Thanks to https://gist.github.com/mdjnewman/b9d722188f4f9c6bb277a37619665e77 
 
-REGION=eu-west-2
+REGION=us-east-1
 STACK_NAME=transcribe-on-s3-upload
 
 # check if cloudformation stack exists
