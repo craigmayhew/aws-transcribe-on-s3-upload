@@ -5,6 +5,9 @@ script:
   # Build lambda function into zip file
   - chmod +x build.sh
   - ./build.sh
+deploy:
+  - chmod +x deploy.sh
+  - ./deploy.sh
 
 notifications:
   email: false
