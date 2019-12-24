@@ -6,8 +6,10 @@ script:
   - chmod +x build.sh
   - ./build.sh
 deploy:
-  - chmod +x deploy.sh
-  - ./deploy.sh
+    - provider: script
+    script: deploy.sh
+    on:
+      branch: master
 
 notifications:
   email: false
