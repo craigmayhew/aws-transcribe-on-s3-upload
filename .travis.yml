@@ -6,7 +6,7 @@ script:
   - chmod +x build.sh
   - ./build.sh
 before_deploy:
-  - chmod +x build.sh
+  - chmod +x deploy.sh
 deploy:
   provider: script
   script: deploy.sh
