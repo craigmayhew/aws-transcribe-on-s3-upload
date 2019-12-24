@@ -3,6 +3,7 @@ python: "3.8"
 script:
   # https://github.com/kibaffo33/aws_transcribe_to_docx
   # Build lambda function into zip file
+  - chmod +x build.sh
   - ./build.sh
 
 notifications:
