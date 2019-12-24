@@ -5,6 +5,8 @@ script:
   # Build lambda function into zip file
   - chmod +x build.sh
   - ./build.sh
+before_deploy:
+  - chmod +x build.sh
 deploy:
   provider: script
   script: deploy.sh
