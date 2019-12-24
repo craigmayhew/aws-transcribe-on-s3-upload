@@ -10,7 +10,7 @@ if ! aws cloudformation describe-stacks --region $REGION --stack-name $STACK_NAM
   aws cloudformation create-stack \
     --region $REGION \
     --stack-name $STACK_NAME \
-    --template-body template.yaml
+    --template-body file://template.yaml
 
   echo "Waiting for stack to be created ..."
   aws cloudformation wait stack-create-complete \
@@ -25,7 +25,7 @@ else
   update_output=$( aws cloudformation update-stack \
     --region $REGION \
     --stack-name $STACK_NAME \
-    --template-body template.yaml  2>&1)
+    --template-body file://template.yaml  2>&1)
   status=$?
   set -e
 
