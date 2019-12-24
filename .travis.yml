@@ -1,6 +1,8 @@
 language: python
 python: "3.8"
 cache: pip
+before_Script:
+   - pip3 install awscli
 script:
   # https://github.com/kibaffo33/aws_transcribe_to_docx
   # Build lambda function into zip file
