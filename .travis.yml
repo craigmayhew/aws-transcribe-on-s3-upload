@@ -6,7 +6,7 @@ services:
 before_install:
   - |
     docker pull amazonlinux:2018.03
-    docker build -t $APP_NAME:$TRAVIS_BUILD_ID .
+    docker build -t transcriber:$TRAVIS_BUILD_ID .
 before_script:
   - pip3 install awscli
 script:
