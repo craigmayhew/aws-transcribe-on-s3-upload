@@ -52,7 +52,7 @@ else
     echo "Waiting for stack update to complete ..."
     aws cloudformation wait stack-update-complete \
       --region $REGION \
-      --stack-name $STACK_NAME \
+      --stack-name $STACK_NAME
   fi
 
 fi
