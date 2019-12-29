@@ -12,7 +12,7 @@ before_script:
 script:
   # https://github.com/kibaffo33/aws_transcribe_to_docx
   # Build lambda function into zip file
-  - docker run -v $(pwd):/var/app -it amazonlinux:2018.03 -w /var/app "chmod +x build.sh && ./build.sh"
+  - docker run -v $(pwd):/var/app -w /var/app -it amazonlinux:2018.03 "chmod +x build.sh && ./build.sh"
   - chmod +x deploy.sh && ./deploy.sh
 
 notifications:
