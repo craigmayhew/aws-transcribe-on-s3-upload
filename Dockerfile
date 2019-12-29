@@ -12,10 +12,10 @@ RUN yum install -y \
       make \
       man-pages \
       man \
-      python36 \
-      python36-devel \
-      python36-virtualenv \
-      python34-setuptools \
+      python37 \
+      python37-devel \
+      python37-virtualenv \
+      python37-setuptools \
       rsync \
       tar \
       wget \
