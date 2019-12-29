@@ -7,18 +7,26 @@ The folowing JSON shows the required IAM permissions. You must change your bucke
     "Statement": [
         {
             "Effect": "Allow",
-            "Action": "iam:GetRole",
-            "Resource": "*"
+            "Action": [
+                "iam:CreateRole",
+                "iam:GetRole",
+                "iam:PassRole",
+                "iam:PutRolePolicy"
+            ],
+            "Resource": "arn:aws:iam::*:role/transcribe-on-s3-upload-LambdaExecutionRole-*"
         },
         {
             "Effect": "Allow",
             "Action": [
+                "lambda:AddPermission",
                 "lambda:CreateFunction",
+                "lambda:DeleteFunction",
                 "lambda:GetFunctionConfiguration",
+                "lambda:GetFunction",
                 "lambda:UpdateFunctionCode"
             ],
             "Resource": [
-                "arn:aws:lambda:*:*:function:transcribe-on-s3-upload-CreateTranscription*"
+                "arn:aws:lambda:*:*:function:CreateTranscription"
             ]
         },
         {
