@@ -96,13 +96,4 @@ Resources:
     # then uncommented and deployed as an update.
     # See: https://aws.amazon.com/premiumsupport/knowledge-center/unable-validate-destination-s3/
     Properties:
-      #NotificationConfiguration:
-      #  LambdaConfigurations:
-      #    - Event: 's3:ObjectCreated:*'
-      #      Filter:
-      #        S3Key:
-      #          Rules:
-      #            -
-      #              Name: suffix
-      #              Value: mp4
-      #      Function: !GetAtt CreateTranscription.Arn      BucketName: !Ref S3Bucket
+      BucketName: !Ref S3Bucket

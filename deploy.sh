@@ -22,11 +22,17 @@ else
   # update stack if it already exists
   echo -e "\nStack exists, attempting update ..."
 
+  # concat s3 notifications on to our cloudformation template
+  # we do this only on update of stack, as s3 has a limitation
+  # where you can't define bucket notifications on bucket create
+  # sadly this requires this deploy be run twice on the first ever deploy
+  cat template.yaml template-after-create.yaml > template-update-stack.yaml
+
   set +e
   update_output=$( aws cloudformation update-stack \
     --region $REGION \
     --stack-name $STACK_NAME \
-    --template-body file://template.yaml \
+    --template-body file://template-update-stack.yaml \
     --capabilities CAPABILITY_IAM 2>&1)
   status=$?
   set -e
