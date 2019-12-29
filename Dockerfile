@@ -12,7 +12,6 @@ RUN yum install -y \
       make \
       man-pages \
       man \
-      python36-virtualenv \
       python3 \
       python3-devel \
       python3-setuptools \
