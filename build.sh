@@ -4,10 +4,10 @@ mkdir -p package
 pip3 install --target ./package tscribe
 
 # check syntax of script
-python3 -m py_compile lambda.py
+python3 -m py_compile index.py
 
-# copy lambda.py into package folder
-cp lambda.py package/
+# copy index.py into package folder
+cp index.py package/
 
 # permissions
 chmod -R 755 package/*
