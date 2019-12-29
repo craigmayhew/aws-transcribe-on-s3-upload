@@ -9,7 +9,7 @@ before_install:
 before_script:
   - pip3 install awscli
 script:
-  - docker run -v $(pwd):/var/app -w /var/app -it amazonlinux:2018.03 chmod +x build.sh && ./build.sh
+  - docker run -v $(pwd):/var/app -w /var/app -it transcriber:$TRAVIS_BUILD_ID chmod +x build.sh && ./build.sh
   - chmod +x deploy.sh && ./deploy.sh
 
 notifications:
