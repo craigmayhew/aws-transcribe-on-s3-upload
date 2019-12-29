@@ -3,7 +3,7 @@ Parameters:
   S3Bucket: 
     Type: String
     Default: transcribe-everything-placed-here
-    Description: S3 Bucket to place mp4 files into, and receive transcribed file into
+    Description: S3 Bucket to place mp4 files into, and receive transcribed file into. This needs to be unique.
   LambdaFunctionName:
     Type: String
     Default: CreateTranscription
