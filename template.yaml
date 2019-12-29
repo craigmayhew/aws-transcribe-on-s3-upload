@@ -96,7 +96,6 @@ Resources:
     # then uncommented and deployed as an update.
     # See: https://aws.amazon.com/premiumsupport/knowledge-center/unable-validate-destination-s3/
     Properties:
-      BucketName: transcribe-everything-placed-here
       #NotificationConfiguration:
       #  LambdaConfigurations:
       #    - Event: 's3:ObjectCreated:*'
@@ -106,4 +105,4 @@ Resources:
       #            -
       #              Name: suffix
       #              Value: mp4
-      #      Function: !GetAtt CreateTranscription.Arn
+      #      Function: !GetAtt CreateTranscription.Arn      BucketName: !Ref S3Bucket
