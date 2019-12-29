@@ -13,4 +13,4 @@ cp lambda.py package/
 chmod -R 755 package/*
 
 # compress python lambda into zip
-cd package && zip -r9 ../function.zip .
+cd package && zip -r9 -q ../function.zip .
