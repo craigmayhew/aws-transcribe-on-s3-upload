@@ -67,3 +67,5 @@ aws lambda update-function-code \
   --publish
 ```
 
+# Thank you
+https://github.com/kibaffo33/aws_transcribe_to_docx - my repo is just an aws deploy of kibaffo33's excellent repo.
