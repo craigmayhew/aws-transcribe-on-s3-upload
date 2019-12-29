@@ -54,7 +54,7 @@ chmod +x build.sh
 # deploy zip file over place holder lambda
 aws lambda update-function-code \
   --region $REGION \
-  --function-name transcribe-on-s3-upload-CreateTranscription \
+  --function-name CreateTranscription \
   --zip-file fileb://function.zip \
   --publish
 ```

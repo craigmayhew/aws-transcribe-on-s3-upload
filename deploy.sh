@@ -2,6 +2,7 @@
 
 REGION=us-east-1
 STACK_NAME=transcribe-on-s3-upload
+LAMBDA_FUNCTION_NAME=CreateTranscription
 
 # check if cloudformation stack exists
 if ! aws cloudformation describe-stacks --region $REGION --stack-name $STACK_NAME ; then
@@ -61,7 +62,7 @@ fi
 echo -e "\nStack ready ... Deploying freshly built lambda"
 aws lambda update-function-code \
   --region $REGION \
-  --function-name transcribe-on-s3-upload-CreateTranscription \
+  --function-name $LAMBDA_FUNCTION_NAME \
   --zip-file fileb://function.zip \
   --publish
 
