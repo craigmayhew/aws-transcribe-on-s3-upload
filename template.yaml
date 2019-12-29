@@ -4,6 +4,10 @@ Parameters:
     Type: String
     Default: transcribe-everything-placed-here
     Description: S3 Bucket to place mp4 files into, and receive transcribed file into
+  LambdaFunctionName:
+    Type: String
+    Default: CreateTranscription
+    Description: Name of the lambda function. This doesn't need to be changed.
 Resources:
   CreateTranscription:
     DependsOn: LambdaExecutionRole
@@ -15,6 +19,7 @@ Resources:
           
           def handler(event, context):
             return "Deploy a zip over this function"
+      FunctionName: !Ref LambdaFunctionName
       Handler: index.handler
       MemorySize: 192
       Role:
