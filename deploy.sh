@@ -44,18 +44,16 @@ else
     # Don't fail for no-op update
     if [[ $update_output == *"ValidationError"* && $update_output == *"No updates"* ]] ; then
       echo -e "\nFinished create/update - no updates to be performed"
-      exit 0
     else
       exit $status
     fi
 
+  else
+    echo "Waiting for stack update to complete ..."
+    aws cloudformation wait stack-update-complete \
+      --region $REGION \
+      --stack-name $STACK_NAME \
   fi
-
-
-  echo "Waiting for stack update to complete ..."
-  aws cloudformation wait stack-update-complete \
-    --region $REGION \
-    --stack-name $STACK_NAME \
 
 fi
 
@@ -64,3 +62,6 @@ echo -e "\nStack ready ... Deploying freshly built lambda"
 aws lambda update-function-code --function-name transcribe-on-s3-upload-CreateTranscription --zip-file fileb://function.zip --publish
 
 echo -e "\nLambda updated"
+
+# All is well
+exit 0
