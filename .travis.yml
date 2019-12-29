@@ -1,13 +1,18 @@
 language: python
 python: "3.8"
 cache: pip
-before_Script:
-   - pip3 install awscli
+services:
+  - docker
+before_install:
+  - |
+    docker pull amazonlinux:2018.03
+    docker build -t $APP_NAME:$TRAVIS_BUILD_ID .
+before_script:
+  - pip3 install awscli
 script:
   # https://github.com/kibaffo33/aws_transcribe_to_docx
   # Build lambda function into zip file
-  - chmod +x build.sh
-  - ./build.sh
+  - docker run -v $(pwd):/var/app -it amazonlinux:2018.03 "chmod +x build.sh && ./build.sh"
   - chmod +x deploy.sh && ./deploy.sh
 
 notifications:
