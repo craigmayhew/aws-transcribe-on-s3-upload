@@ -59,7 +59,10 @@ fi
 
 # once stack is ready, update lambda function with one we built in CI
 echo -e "\nStack ready ... Deploying freshly built lambda"
-aws lambda update-function-code --function-name transcribe-on-s3-upload-CreateTranscription --zip-file fileb://function.zip --publish
+aws lambda update-function-code \
+  --function-name transcribe-on-s3-upload-CreateTranscription \
+  --zip-file fileb://function.zip \
+  --publish
 
 echo -e "\nLambda updated"
 
