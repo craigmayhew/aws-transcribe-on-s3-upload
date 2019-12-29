@@ -1,4 +1,4 @@
-FROM amazonlinux:2018.03
+FROM amazonlinux:2
 RUN yum update -y
 RUN yum install -y \
       Cython \
