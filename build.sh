@@ -3,7 +3,7 @@ mkdir -p package
 # install 3rd party python package
 pip3 install pipenv
 cd package
-pipenv install etree tscribe
+pipenv install tscribe
 
 # check syntax of script
 python3 -m py_compile index.py
