@@ -19,3 +19,6 @@ python3 -c 'import index; index.test()'
 # remove any existing zip and compress python lambda into new zip
 rm -f ../function.zip
 zip -r9 -q ../function.zip .
+
+# debug info
+ls -lah ../function.zip
