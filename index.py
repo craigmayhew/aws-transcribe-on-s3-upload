@@ -11,6 +11,7 @@ from botocore.exceptions import ClientError
 def test():
     transcribe = boto3.client('transcribe')
     x = datetime.datetime.now()
+    print("Compiles")
     return "Compiles"
 
 def handler(event, context):
