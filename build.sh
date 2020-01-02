@@ -15,7 +15,7 @@ chmod -R 755 ./*
 python3 -m py_compile index.py
 
 # run the python test function
-python3 -c 'import index; print index.test()'
+python3 -c 'import index; index.test()'
 
 # compress python lambda into zip
 zip -r9 -q ../function.zip .
