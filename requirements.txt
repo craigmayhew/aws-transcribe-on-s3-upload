@@ -1,2 +1,0 @@
-MyApp
-etree>=0.1

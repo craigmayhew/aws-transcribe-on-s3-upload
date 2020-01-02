@@ -1,7 +1,9 @@
 mkdir -p package
 
 # install 3rd party python package
-pip3 install --target ./package etree tscribe
+pip3 install --user pipenv
+cd package
+pipenv install etree tscribe
 
 # check syntax of script
 python3 -m py_compile index.py
