@@ -9,13 +9,13 @@ import urllib.request
 from botocore.exceptions import ClientError
 
 def test():
-    transcribe = boto3.client('transcribe')
+    transcribe = boto3.client('transcribe', region_name='eu-west-2')
     x = datetime.datetime.now()
     print("Compiles")
     return "Compiles"
 
 def handler(event, context):
-    transcribe = boto3.client('transcribe')
+    transcribe = boto3.client('transcribe', region_name='eu-west-2')
 
     x = datetime.datetime.now()
 
