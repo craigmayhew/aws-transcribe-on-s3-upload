@@ -3,7 +3,7 @@ cd package
 
 # install 3rd party python packages
 pip3 install pipenv
-pipenv install tscribe
+pipenv install boto3 tscribe
 
 # copy index.py into package folder
 cp ../index.py ./
