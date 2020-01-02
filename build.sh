@@ -16,5 +16,6 @@ python3 -m py_compile index.py
 # run the python test function
 python3 -c 'import index; index.test()'
 
-# compress python lambda into zip
+# remove any existing zip and compress python lambda into new zip
+rm -f ../function.zip
 zip -r9 -q ../function.zip .
