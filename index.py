@@ -8,6 +8,11 @@ import tscribe
 import urllib.request
 from botocore.exceptions import ClientError
 
+def test():
+    transcribe = boto3.client('transcribe')
+    x = datetime.datetime.now()
+    return "Compiles"
+
 def handler(event, context):
     transcribe = boto3.client('transcribe')
 

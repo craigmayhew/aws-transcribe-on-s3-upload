@@ -6,6 +6,9 @@ pip3 install --target ./package etree tscribe
 # check syntax of script
 python3 -m py_compile index.py
 
+# run the python test function
+python3 -c 'import index; print index.test()'
+
 # copy index.py into package folder
 cp index.py package/
 
