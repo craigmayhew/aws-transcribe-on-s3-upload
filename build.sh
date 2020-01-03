@@ -13,6 +13,9 @@ chmod -R 755 ./*
 # check syntax of script
 python3 -m py_compile index.py
 
+# remove compiled bytecode to remain under lambdas 50MB zip limit
+find . -name '*.pyc' -delete
+
 # run the python test function
 python3 -c 'import index; index.test()'
 
