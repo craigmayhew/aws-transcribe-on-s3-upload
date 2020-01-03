@@ -63,7 +63,7 @@ fi
 # so we set to 3.7 before upload of zipfile
 aws lambda update-function-configuration \
    --region $REGION \
-   --function-name $LAMBDA_FUNCTION_NAME
+   --function-name $LAMBDA_FUNCTION_NAME \
    --runtime python3.7
 
 # once stack is ready, update lambda function with one we built in CI
@@ -79,7 +79,7 @@ aws lambda update-function-code \
 # so we set to 3.8 after upload of zipfile
 aws lambda update-function-configuration \
    --region $REGION \
-   --function-name $LAMBDA_FUNCTION_NAME
+   --function-name $LAMBDA_FUNCTION_NAME \
    --runtime python3.8
 
 echo -e "\nLambda updated"
