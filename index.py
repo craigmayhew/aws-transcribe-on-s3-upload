@@ -6,6 +6,7 @@ import os
 import time
 import tscribe
 import urllib.request
+from urllib.parse import unquote_plus
 from botocore.exceptions import ClientError
 
 def test():
