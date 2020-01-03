@@ -1,6 +1,6 @@
 # Thanks to https://gist.github.com/mdjnewman/b9d722188f4f9c6bb277a37619665e77 
 
-REGION=us-east-1
+REGION=eu-west-2
 STACK_NAME=transcribe-on-s3-upload
 LAMBDA_FUNCTION_NAME=CreateTranscription
 
@@ -58,6 +58,14 @@ else
 
 fi
 
+# horrible workaround because lambda doesn't support
+# uploading zipfiles for python3.8 runtimes at present
+# so we set to 3.7 before upload of zipfile
+aws lambda update-function-configuration \
+   --region $REGION \
+   --function-name $LAMBDA_FUNCTION_NAME
+   --runtime python3.7
+
 # once stack is ready, update lambda function with one we built in CI
 echo -e "\nStack ready ... Deploying freshly built lambda"
 aws lambda update-function-code \
@@ -65,6 +73,14 @@ aws lambda update-function-code \
   --function-name $LAMBDA_FUNCTION_NAME \
   --zip-file fileb://function.zip \
   --publish
+
+# horrible workaround because lambda doesn't support
+# uploading zipfiles for python3.8 runtimes at present
+# so we set to 3.8 after upload of zipfile
+aws lambda update-function-configuration \
+   --region $REGION \
+   --function-name $LAMBDA_FUNCTION_NAME
+   --runtime python3.8
 
 echo -e "\nLambda updated"
 
