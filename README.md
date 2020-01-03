@@ -24,6 +24,7 @@ The folowing JSON shows the required IAM permissions. You must change your bucke
                 "lambda:DeleteFunction",
                 "lambda:GetFunctionConfiguration",
                 "lambda:GetFunction",
+                "lambda:UpdateFunctionConfiguration",
                 "lambda:UpdateFunctionCode"
             ],
             "Resource": [
