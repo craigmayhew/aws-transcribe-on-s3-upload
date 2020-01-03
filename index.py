@@ -46,8 +46,16 @@ def handler(event, context):
             file_name = '/tmp/local_saved_file'
             urllib.request.urlretrieve(status['TranscriptionJob']['Transcript']['TranscriptFileUri'], file_name)
             bucket = os.getenv('ENV_S3BUCKET')
-            object_name = 'empty.mp4.transcript.json'
-            response = s3_client.upload_file(file_name, bucket, object_name)
+            object_json_name = s3_filekey+'.transcript.json'
+            response = s3_client.upload_file(file_name, bucket, object_json_name)
+            
+            # convert json to docx
+            object_docx_name = s3_filekey+".docx"
+            tscribe.write(object_json_name, save_as=object_docx_name)
+
+            #upload docx to s3
+            response = s3_client.upload_file(object_docx_name, bucket, object_docx_name)
+
         except ClientError as e:
             logging.error(e)
             return False
