@@ -26,7 +26,7 @@ Resources:
         Fn::GetAtt:
         - LambdaExecutionRole
         - Arn
-      Runtime: python3.6
+      Runtime: python3.8
       Timeout: 900
       Environment:
         Variables: 
