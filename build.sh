@@ -24,4 +24,6 @@ rm -f ../function.zip
 zip -r9 -q ../function.zip .
 
 # debug info
+echo "debug info"
 ls -lah ../function.zip
+python3 --version
