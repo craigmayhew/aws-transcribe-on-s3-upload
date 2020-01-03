@@ -9,6 +9,7 @@ The folowing JSON shows the required IAM permissions. You must change your bucke
             "Effect": "Allow",
             "Action": [
                 "iam:CreateRole",
+                "iam:DeleteRolePolicy",
                 "iam:GetRole",
                 "iam:PassRole",
                 "iam:PutRolePolicy"
