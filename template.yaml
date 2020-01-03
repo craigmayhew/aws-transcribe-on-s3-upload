@@ -64,21 +64,13 @@ Resources:
               - transcribe:StartTranscriptionJob
             Resource: 
               - '*'
-      - PolicyName: read-s3-bucket
+      - PolicyName: read-write-s3-bucket
         PolicyDocument:
           Version: '2012-10-17'
           Statement:
           - Effect: Allow
             Action:
               - s3:GetObject
-            Resource: 
-              - !Sub 'arn:aws:s3:::${S3Bucket}'
-      - PolicyName: write-s3-bucket
-        PolicyDocument:
-          Version: '2012-10-17'
-          Statement:
-          - Effect: Allow
-            Action:
               - s3:PutObject
               - s3:PutObjectAcl
             Resource: 
