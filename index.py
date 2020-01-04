@@ -43,15 +43,15 @@ def handler(event, context):
 
         s3_client = boto3.client('s3')
         try:
-            file_name = '/tmp/local_saved_file'
-            urllib.request.urlretrieve(status['TranscriptionJob']['Transcript']['TranscriptFileUri'], file_name)
+            local_json_file = '/tmp/local_saved_file'
+            urllib.request.urlretrieve(status['TranscriptionJob']['Transcript']['TranscriptFileUri'], local_json_file)
             bucket = os.getenv('ENV_S3BUCKET')
             object_json_name = s3_filekey+'.transcript.json'
-            response = s3_client.upload_file(file_name, bucket, object_json_name)
+            response = s3_client.upload_file(local_json_file, bucket, object_json_name)
             
             # convert json to docx
             object_docx_name = s3_filekey+".docx"
-            tscribe.write(file_name, save_as=object_docx_name)
+            tscribe.write(local_json_file, save_as=object_docx_name)
 
             #upload docx to s3
             response = s3_client.upload_file(object_docx_name, bucket, object_docx_name)
