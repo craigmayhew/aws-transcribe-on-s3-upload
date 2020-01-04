@@ -46,15 +46,16 @@ def handler(event, context):
             local_json_file = '/tmp/local_saved_file'
             urllib.request.urlretrieve(status['TranscriptionJob']['Transcript']['TranscriptFileUri'], local_json_file)
             bucket = os.getenv('ENV_S3BUCKET')
-            object_json_name = s3_filekey+'.transcript.json'
+            object_json_name = s3_filekey+'-transcript.json'
             response = s3_client.upload_file(local_json_file, bucket, object_json_name)
             
             # convert json to docx
-            object_docx_name = s3_filekey+".docx"
-            tscribe.write(local_json_file, save_as=object_docx_name)
+            object_docx_name = s3_filekey+"-transcript.docx"
+            local_docx_file = '/tmp/' + object_docx_name
+            tscribe.write(local_json_file, save_as=local_docx_file)
 
             #upload docx to s3
-            response = s3_client.upload_file(object_docx_name, bucket, object_docx_name)
+            response = s3_client.upload_file(local_docx_file, bucket, object_docx_name)
 
         except ClientError as e:
             logging.error(e)
