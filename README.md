@@ -1,5 +1,9 @@
+# AWS Transcribe on S3 Upload
+An AWS stack that upon upload of mp4 files, adds docx transcriptions to the same bucket.
 
-# Manually create an IAM user and set permissions
+[![Build Status](https://travis-ci.org/craigmayhew/aws-transcribe-on-s3-upload.svg?branch=master)](https://travis-ci.org/craigmayhew/aws-transcribe-on-s3-upload)
+
+## Manually create an IAM user and set permissions
 The folowing JSON shows the required IAM permissions. You must change your bucket name in the below example from `transcribe-everything-placed-here`. If required, you can also rename the function from `CreateTranscription`. Be aware template.yaml must be updated to reflect your changes. 
 ```json
 {
@@ -51,7 +55,7 @@ The folowing JSON shows the required IAM permissions. You must change your bucke
 ```
 
 
-# Manual steps if you are not using CI
+## Manual steps if you are not using CI
 ```sh
 # deploy cloudformation stack
 aws cloudformation create-stack --template-body file://template.yaml --capabilities CAPABILITY_IAM --stack-name "transcribe-on-s3-upload"
@@ -69,5 +73,5 @@ aws lambda update-function-code \
   --publish
 ```
 
-# Thank you
+## Thank you
 https://github.com/kibaffo33/aws_transcribe_to_docx - my repo is just an aws deploy of kibaffo33's excellent repo.
