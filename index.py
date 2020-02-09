@@ -52,7 +52,8 @@ def handler(event, context):
             # convert json to docx
             object_docx_name = s3_filekey+"-transcript.docx"
             local_docx_file = '/tmp/' + object_docx_name
-            tscribe.write(local_json_file, save_as=local_docx_file)
+            tmp_dir = '/tmp/'
+            tscribe.write(local_json_file, save_as=local_docx_file, tmp_dir=tmp_dir)
 
             #upload docx to s3
             response = s3_client.upload_file(local_docx_file, bucket, object_docx_name)
