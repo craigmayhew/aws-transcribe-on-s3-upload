@@ -13,7 +13,6 @@ CLI_ARGUMENT_COUNT="3"
 #
 # Transcribe test arguments
 # 
-
 transcribe_args=(
     --region ${REGION} 
 )
