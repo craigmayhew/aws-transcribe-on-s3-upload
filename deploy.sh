@@ -47,9 +47,6 @@ then
     --profile ${PROFILE_PARAM}
   )
 
-  transcribe_args+=(
-    --profile ${PROFILE_PARAM}
-  )
 else
   echo
   echo "We are deploying using CI..."

@@ -19,6 +19,14 @@ transcribe_args=(
 )
 
 #
+# Lambda deploy arguments.
+#
+lambda_args=(
+    --region ${REGION} 
+    --function-name $LAMBDA_FUNCTION_NAME 
+)
+
+#
 # Test to see if script was called with AWS profile parameter locally
 #
 if [ "$#" == "${CLI_ARGUMENT_COUNT}" ];
@@ -28,6 +36,10 @@ then
   NUMBER_OF_SPEAKERS="$3"
 
   transcribe_args+=(
+    --profile ${PROFILE_PARAM}
+  )
+
+  lambda_args+=(
     --profile ${PROFILE_PARAM}
   )
 
@@ -55,22 +67,7 @@ FILE_TO_TRANSCRIBE_UNIQ_temp=${RUN_DATE_AND_TIME}-${FILE_TO_TRANSCRIBE}
 FILE_TO_TRANSCRIBE_UNIQ=${FILE_TO_TRANSCRIBE_UNIQ_temp//\ }
 
 cp "${FILE_TO_TRANSCRIBE}" ${FILE_TO_TRANSCRIBE_UNIQ}
-
-
 TRANSCRIPTION_DOCX=${FILE_TO_TRANSCRIBE_UNIQ}-transcript.docx
-
-#
-# Set the number of speakers in the Lambda function ${LAMBDA_FUNCTION_NAME}
-#
-
-#
-# Lambda deploy arguments.
-#
-lambda_args=(
-    --region ${REGION} 
-    --function-name $LAMBDA_FUNCTION_NAME 
-    --profile ${PROFILE_PARAM}
-)
 
 #
 # Set the variable ENV_NUMBER_OF_SPEAKERS in $LAMBDA_FUNCTION_NAME  to the correct number of speakers.
