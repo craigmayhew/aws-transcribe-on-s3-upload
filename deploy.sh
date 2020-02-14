@@ -1,89 +1,70 @@
 # Thanks to https://gist.github.com/mdjnewman/b9d722188f4f9c6bb277a37619665e77 
+#!/bin/bash
+# set -x
 
 REGION=eu-west-2
 STACK_NAME=transcribe-on-s3-upload
 LAMBDA_FUNCTION_NAME=CreateTranscription
+S3_TRANSCRIBE_BUCKET_NAME=transcribe-on-s3-upload
+CLI_ARGUMENT_COUNT="1"
 
-# check if cloudformation stack exists
-if ! aws cloudformation describe-stacks --region $REGION --stack-name $STACK_NAME ; then
-  # install stack if does not exist
-  echo -e "\nStack does not exist, creating ..."
-  aws cloudformation create-stack \
-    --region $REGION \
-    --stack-name $STACK_NAME \
-    --template-body file://template.yaml \
+#
+# Cloudformation arguments.
+#
+args=(
+    --region ${REGION} 
+    --stack-name ${STACK_NAME} 
+    --parameter-overrides S3Bucket=${S3_TRANSCRIBE_BUCKET_NAME} 
     --capabilities CAPABILITY_IAM
+)
 
-  echo "Waiting for stack to be created ..."
-  aws cloudformation wait stack-create-complete \
-    --region $REGION \
-    --stack-name $STACK_NAME \
+#
+# Lambda deploy arguments.
+#
+lambda_args=(
+    --region ${REGION} 
+    --function-name $LAMBDA_FUNCTION_NAME 
+)
 
+#
+# Test to see if script was called locally supplying an AWS profile name as parameter. 
+# If a profile parameter is found then configure aws arguments with supplied profile.
+#
+if [ "$#" == "${CLI_ARGUMENT_COUNT}" ];
+then
+
+  echo
+  echo "We are deploying locally..."
+  echo
+
+  PROFILE_PARAM=$1
+
+  args+=(
+    --profile ${PROFILE_PARAM}
+  )
+
+  lambda_args+=(
+    --profile ${PROFILE_PARAM}
+  )
+
+  transcribe_args+=(
+    --profile ${PROFILE_PARAM}
+  )
 else
-  # update stack if it already exists
-  echo -e "\nStack exists, attempting update ..."
+  echo
+  echo "We are deploying using CI..."
+  echo
+fi 
 
-  # concat s3 notifications on to our cloudformation template
-  # we do this only on update of stack, as s3 has a limitation
-  # where you can't define bucket notifications on bucket create
-  # sadly this requires this deploy be run twice on the first ever deploy
-  cat template.yaml template-after-create.yaml > template-update-stack.yaml
+echo -e "\nDeploying Cloudformation Stack..."
 
-  set +e
-  update_output=$( aws cloudformation update-stack \
-    --region $REGION \
-    --stack-name $STACK_NAME \
-    --template-body file://template-update-stack.yaml \
-    --capabilities CAPABILITY_IAM 2>&1)
-  status=$?
-  set -e
+rm mypipe_${STACK_NAME}
+mkfifo mypipe_${STACK_NAME}
+aws cloudformation deploy --template-file template.yaml "${args[@]}" --debug 2> mypipe_${STACK_NAME}|  grep -i retryhandler  mypipe_${STACK_NAME} | cut -c 1-80
 
-  echo "$update_output"
 
-  if [ $status -ne 0 ] ; then
-
-    # Don't fail for no-op update
-    if [[ $update_output == *"ValidationError"* && $update_output == *"No updates"* ]] ; then
-      echo -e "\nFinished create/update - no updates to be performed"
-    else
-      exit $status
-    fi
-
-  else
-    echo "Waiting for stack update to complete ..."
-    aws cloudformation wait stack-update-complete \
-      --region $REGION \
-      --stack-name $STACK_NAME
-  fi
-
-fi
-
-# horrible workaround because lambda doesn't support
-# uploading zipfiles for python3.8 runtimes at present
-# so we set to 3.7 before upload of zipfile
-aws lambda update-function-configuration \
-   --region $REGION \
-   --function-name $LAMBDA_FUNCTION_NAME \
-   --runtime python3.7
-
-# once stack is ready, update lambda function with one we built in CI
-echo -e "\nStack ready ... Deploying freshly built lambda"
-aws lambda update-function-code \
-  --region $REGION \
-  --function-name $LAMBDA_FUNCTION_NAME \
-  --zip-file fileb://function.zip \
-  --publish
-
-# horrible workaround because lambda doesn't support
-# uploading zipfiles for python3.8 runtimes at present
-# so we set to 3.8 after upload of zipfile
-aws lambda update-function-configuration \
-   --region $REGION \
-   --function-name $LAMBDA_FUNCTION_NAME \
-   --runtime python3.8
-
-echo -e "\nLambda updated"
+echo -e "\nDeploying freshly built lambda"
+aws lambda update-function-code "${lambda_args[@]}" --zip-file fileb://function.zip  --publish
 
 # All is well
 exit 0
-
