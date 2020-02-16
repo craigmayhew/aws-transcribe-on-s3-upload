@@ -3,7 +3,7 @@ cd package
 
 # install 3rd party python packages
 # tscribe: https://github.com/kibaffo33/aws_transcribe_to_docx
-pip3 install --target ./ boto3 tscribe lxml
+pip3 install --target ./ boto3 tscribe
 
 # copy index.py into package folder
 cp ../index.py ./
