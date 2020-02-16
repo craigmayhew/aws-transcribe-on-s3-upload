@@ -2,12 +2,16 @@ AWSTemplateFormatVersion: '2010-09-09'
 Parameters:
   S3Bucket: 
     Type: String
-    Default: transcribe-everything-placed-here
+    Default: transcribe-on-s3-upload
     Description: S3 Bucket to place mp4 files into, and receive transcribed file into. This needs to be unique.
   LambdaFunctionName:
     Type: String
     Default: CreateTranscription
     Description: Name of the lambda function. This doesn't need to be changed.
+  NumberOfSpeakers:
+    Type: String
+    Default: 2
+    Description: The Number of People Involved In The Conversation.
 Resources:
   CreateTranscription:
     DependsOn: LambdaExecutionRole
@@ -31,6 +35,7 @@ Resources:
       Environment:
         Variables: 
           ENV_S3BUCKET: !Ref S3Bucket
+          ENV_NUMBER_OF_SPEAKERS: !Ref NumberOfSpeakers
 
   LambdaExecutionRole:
     Type: AWS::IAM::Role
@@ -89,8 +94,82 @@ Resources:
   SrcBucket:
     DependsOn: CreateTranscription
     Type: AWS::S3::Bucket
-    # NotificationConfiguration must be commented on stack creation,
-    # then uncommented and deployed as an update.
-    # See: https://aws.amazon.com/premiumsupport/knowledge-center/unable-validate-destination-s3/
     Properties:
       BucketName: !Ref S3Bucket
+      AccessControl: Private
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        IgnorePublicAcls: true
+        BlockPublicPolicy: true
+        RestrictPublicBuckets: true
+      LifecycleConfiguration:
+        Rules:
+          - Id: DeleteContentsAfter90Days
+            Status: 'Enabled'
+            ExpirationInDays: 90
+      NotificationConfiguration:
+        LambdaConfigurations:
+          - Event: 's3:ObjectCreated:*'
+            Filter:
+              S3Key:
+                Rules:
+                  -
+                    Name: suffix
+                    Value: mp4
+            Function: !GetAtt CreateTranscription.Arn
+  UserKeys:
+    Type: AWS::IAM::AccessKey
+    Properties:
+      UserName: !Ref 'User'
+
+  User:
+    Type: AWS::IAM::User
+  UserGroup:
+    Type: AWS::IAM::Group
+  Users:
+    Type: AWS::IAM::UserToGroupAddition
+    Properties:
+      GroupName: !Ref 'UserGroup'
+      Users: [!Ref 'User']
+  UserPolicies:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyName: UserBucketAccessPolicy
+      PolicyDocument:
+        Statement:
+        - Effect: Allow
+          Action: [
+            "s3:GetObject",
+            "s3:GetObjectAcl",
+            "s3:GetObjectTagging",
+            "s3:PutObject",
+            "s3:PutObjectAcl",
+            "s3:PutObjectTagging",
+            "s3:DeleteObject",
+            "s3:DeleteObjectAcl",
+            "s3:DeleteObjectTagging",
+            "s3:ListObject",
+            "s3:ListObjects" ]
+          Resource: !Join ["", ["arn:aws:s3:::", !Ref SrcBucket, "/*"]]
+        - Effect: Allow
+          Action: [ 
+            "s3:ListBucket", 
+            "s3:GetBucketLocation",
+            "s3:ListBucketMultipartUploads"]
+          Resource: !Join ["", ["arn:aws:s3:::", !Ref SrcBucket ]]
+        - Effect: Allow
+          Action: [
+            "transcribe:GetTranscriptionJob",
+            "transcribe:ListTranscriptionJobs"]
+          Resource: "*"
+        - Effect: "Allow"
+          Action: [ "lambda:UpdateFunctionConfiguration" ]
+          Resource: !GetAtt CreateTranscription.Arn
+      Groups: [!Ref 'UserGroup']
+Outputs:
+  AccessKey:
+    Value: !Ref 'UserKeys'
+    Description: AWSAccessKeyId of new user
+  SecretKey:
+    Value: !GetAtt [UserKeys, SecretAccessKey]
+    Description: AWSSecretAccessKey of new user 
