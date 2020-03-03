@@ -55,9 +55,7 @@ fi
 
 echo -e "\nDeploying Cloudformation Stack..."
 
-rm mypipe_${STACK_NAME}
-mkfifo mypipe_${STACK_NAME}
-aws cloudformation deploy --template-file template.yaml "${args[@]}" --debug 2> mypipe_${STACK_NAME}|  grep -i retryhandler  mypipe_${STACK_NAME} | cut -c 1-80
+aws cloudformation deploy --template-file template.yaml "${args[@]}"
 
 
 echo -e "\nDeploying freshly built lambda"
