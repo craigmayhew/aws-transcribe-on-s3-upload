@@ -83,9 +83,6 @@ echo
 # Create our deployment bucket
 #
 echo "Create our deployment bucket"
-
-LOOK_FOR_BUCKET=`aws s3 ls "${s3_deployment_args[@]}" s3://${S3_TRANSCRIBE_DEPLOYMENT_BUCKET_NAME}`
-
 aws s3 mb s3://${S3_TRANSCRIBE_DEPLOYMENT_BUCKET_NAME} "${s3_deployment_args[@]}"
 
 #
