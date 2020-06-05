@@ -86,13 +86,7 @@ echo "Create our deployment bucket"
 
 LOOK_FOR_BUCKET=`aws s3 ls "${s3_deployment_args[@]}" s3://${S3_TRANSCRIBE_DEPLOYMENT_BUCKET_NAME}`
 
-if [ -z ${LOOK_FOR_BUCKET} ];
-then
-    echo "S3 Bucket does not exist... Lets create it..."
-    aws s3 mb s3://${S3_TRANSCRIBE_DEPLOYMENT_BUCKET_NAME} "${s3_deployment_args[@]}"
-else
-    echo "S3 Bucket already exists..."
-fi
+aws s3 mb s3://${S3_TRANSCRIBE_DEPLOYMENT_BUCKET_NAME} "${s3_deployment_args[@]}"
 
 #
 # Upload our zipfile
