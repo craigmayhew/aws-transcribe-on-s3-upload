@@ -1,0 +1,127 @@
+AWSTemplateFormatVersion: 2010-09-09
+Metadata:
+  License: Apache-2.0
+Description: >-
+  Create a deployment user to allow you to deploy a aws transcribe stack
+  application.
+Parameters:
+  Password:
+    NoEcho: 'true'
+    Type: String
+    Description: New account password
+    MinLength: '1'
+    MaxLength: '64'
+    ConstraintDescription: the password must be between 1 and 64 characters
+  TranscribeS3BucketName:
+    Type: String
+    Description: Trabscribe S3 Bucket Name
+    MinLength: '1'
+    MaxLength: '64'
+    Default: transcribe-on-s3-upload
+    ConstraintDescription: Bucket name 1 and 64 characters.
+Resources:
+  CFNUser:
+    Type: 'AWS::IAM::User'
+    Properties:
+      LoginProfile:
+        Password: !Ref Password
+  CFNUserGroup:
+    Type: 'AWS::IAM::Group'
+  Users:
+    Type: 'AWS::IAM::UserToGroupAddition'
+    Properties:
+      GroupName: !Ref CFNUserGroup
+      Users:
+        - !Ref CFNUser
+  CFNUserPolicies:
+    Type: 'AWS::IAM::Policy'
+    Properties:
+      PolicyName: CFNUsers
+      PolicyDocument:
+        Statement:
+          - Effect: Allow
+            Action:
+              - 'iam:CreateRole'
+              - 'iam:DeleteRole'
+              - 'iam:DeleteRolePolicy'
+              - 'iam:GetRole'
+              - 'iam:getGroupPolicy'
+              - 'iam:PassRole'
+              - 'iam:PutRolePolicy'
+              - 'iam:CreateGroup'
+              - 'iam:DeleteGroup'
+              - 'iam:CreateUser'
+              - 'iam:getRolePolicy'
+              - 'iam:DeleteUser'
+            Resource: '*'
+          - Effect: Allow
+            Action:
+              - 'iam:ListAccessKeys'
+              - 'iam:CreateAccessKey'
+            Resource: '*'
+          - Effect: Allow
+            Action:
+              - 'iam:AddUserToGroup'
+              - 'iam:PutGroupPolicy'
+            Resource: '*'
+          - Effect: Allow
+            Action:
+              - 'lambda:AddPermission'
+              - 'lambda:RemovePermission'
+              - 'lambda:CreateFunction'
+              - 'lambda:DeleteFunction'
+              - 'lambda:GetFunctionConfiguration'
+              - 'iam:PutRolePolicy'
+              - 'iam:GetRolePolicy'
+              - 'iam:DeleteRolePolicy'
+              - 'lambda:GetFunction'
+              - 'lambda:DeleteFunction'
+              - 'lambda:UpdateFunctionConfiguration'
+              - 'lambda:UpdateFunctionCode'
+            Resource: 'arn:aws:lambda:*:*:function:CreateTranscription'
+          - Effect: Allow
+            Action:
+              - 's3:AbortMultipartUpload'
+              - 's3:CreateBucket'
+              - 's3:DeleteBucket'
+              - 's3:DeleteObject'
+              - 's3:GetBucketAcl'
+              - 's3:GetBucketNotification'
+              - 's3:GetLifecycleConfiguration'
+              - 's3:GetObject'
+              - 's3:PutBucketNotification'
+              - 's3:DeleteBucketNotification'
+              - 's3:PutBucketTagging'
+              - 's3:PutLifecycleConfiguration'
+              - 's3:DeleteLifecycleConfiguration'
+              - 's3:PutObject'
+              - 's3:PutBucketPublicAccessBlock'
+              - 's3:GetBucketPublicAccessBlock'
+              - 's3:DeleteBucketPublicAccessBlock'
+              - 's3:CreateMultipartUpload'
+              - 's3:ListBucket'
+              - 'tag:*'
+            Resource: '*'
+          - Effect: Allow
+            Action:
+              - 'cloudformation:*'
+            Resource: 'arn:aws:cloudformation:*:*:stack/*'
+          - Effect: Allow
+            Action:
+              - 'transcribe:*'
+            Resource: '*'
+      Groups:
+        - !Ref CFNUserGroup
+  CFNKeys:
+    Type: 'AWS::IAM::AccessKey'
+    Properties:
+      UserName: !Ref CFNUser
+Outputs:
+  AccessKey:
+    Value: !Ref CFNKeys
+    Description: AWSAccessKeyId of new user
+  SecretKey:
+    Value: !GetAtt 
+      - CFNKeys
+      - SecretAccessKey
+    Description: AWSSecretAccessKey of new user

@@ -8,18 +8,20 @@ import tscribe
 import urllib.request
 from urllib.parse import unquote_plus
 from botocore.exceptions import ClientError
+from lxml import etree
 
 def test():
     transcribe = boto3.client('transcribe', region_name='eu-west-2')
     x = datetime.datetime.now()
-    print("Compiles")
-    return "Compiles"
+    print("Transcribe Test Passed - Compiles")
+    return "Transcribe Test Passed - Compiles"
 
 def handler(event, context):
     transcribe = boto3.client('transcribe', region_name='eu-west-2')
     for record in event['Records']:
         x = datetime.datetime.now()
-
+        
+        number_of_speakers = int(os.getenv('ENV_NUMBER_OF_SPEAKERS'))
         s3_bucket = record['s3']['bucket']['name']
         s3_filekey = unquote_plus(record['s3']['object']['key'])
         job_name = "Transcribe-Video-" + x.strftime("%Y-%m-%d-%H-%M-%S")
@@ -30,7 +32,11 @@ def handler(event, context):
             TranscriptionJobName=job_name,
             Media={'MediaFileUri': job_uri},
             MediaFormat='mp4',
-            LanguageCode='en-US'
+            LanguageCode='en-GB',
+            Settings={
+                'ShowSpeakerLabels': True,
+                'MaxSpeakerLabels': number_of_speakers,
+            },
         )
 
         while True:
@@ -46,6 +52,7 @@ def handler(event, context):
             local_json_file = '/tmp/local_saved_file'
             urllib.request.urlretrieve(status['TranscriptionJob']['Transcript']['TranscriptFileUri'], local_json_file)
             bucket = os.getenv('ENV_S3BUCKET')
+           
             object_json_name = s3_filekey+'-transcript.json'
             response = s3_client.upload_file(local_json_file, bucket, object_json_name)
             
@@ -57,6 +64,11 @@ def handler(event, context):
 
             #upload docx to s3
             response = s3_client.upload_file(local_docx_file, bucket, object_docx_name)
+
+            # # delete transcription job
+            # transcribe.delete_transcription_job(
+            #     TranscriptionJobName=job_name
+            # )
 
         except ClientError as e:
             logging.error(e)

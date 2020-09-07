@@ -1,16 +1,18 @@
 language: python
-python: "3.8"
+python: "3.7"
 cache: pip
 services:
   - docker
 before_install:
   - |
+    cd build
     docker build -t transcriber:$TRAVIS_BUILD_ID .
 before_script:
   - pip3 install awscli
 script:
-  - docker run -v $(pwd):/var/app -w /var/app -it transcriber:$TRAVIS_BUILD_ID chmod +x build.sh && ./build.sh
-  - chmod +x deploy.sh && ./deploy.sh
+  - docker run -v $(pwd):/var/app -w /var/app -it transcriber:$TRAVIS_BUILD_ID /bin/sh -c "chmod +x build.sh && ./build.sh; exit"
+  - cd ..
+  - chmod +x deploy-ci.sh && ./deploy-ci.sh
 
 notifications:
   email: false
