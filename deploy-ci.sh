@@ -4,7 +4,7 @@
 REGION=eu-west-2
 STACK_NAME=transcribe-on-s3-upload
 LAMBDA_FUNCTION_NAME=CreateTranscription #Change function name here if you wish.
-S3_TRANSCRIBE_BUCKET_NAME=transcribe-on-s3-upload
+S3_TRANSCRIBE_BUCKET_NAME=transcribe-everything-placed-here
 S3_TRANSCRIBE_DEPLOYMENT_BUCKET_NAME=${S3_TRANSCRIBE_BUCKET_NAME}-deploy
 CLI_ARGUMENT_COUNT="1"
 
